@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import ModeToggle from './mode-toggle';
 import Link from 'next/link';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { EllipsisVertical, ShoppingCart, UserIcon } from 'lucide-react';
 import {
   Sheet,
