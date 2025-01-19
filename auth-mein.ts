@@ -77,29 +77,19 @@ export const config = {
         token.id = user.id;
         token.role = user.role;
 
-        // If user has no name then use the email
-        if (user.name === 'NO_NAME') {
-          token.name = user.email!.split('@')[0];
-
-          // Update database to reflect the token name
-          await prisma.user.update({
-            where: { id: user.id },
-            data: { name: token.name },
-          });
-        }
-
         if (trigger === 'signIn' || trigger === 'signUp') {
           const cookiesObject = await cookies();
           const sessionCartId = cookiesObject.get('sessionCartId')?.value;
-
           if (sessionCartId) {
+            //console.log('sessionCartId=', sessionCartId);
             const sessionCart = await prisma.cart.findFirst({
-              where: { sessionCartId },
+              where: {
+                sessionCartId,
+              },
             });
-
             if (sessionCart) {
-              // Delete current user cart
-              const res = await prisma.cart.deleteMany({
+              //console.log('sessionCart', sessionCart);
+              const res = await prisma.cart.findMany({
                 where: {
                   AND: [
                     { userId: user.id },
@@ -107,7 +97,27 @@ export const config = {
                   ],
                 },
               });
-              console.log(res);
+              console.log(
+                'userId',
+                user.id,
+                'cart.Id',
+                sessionCart.id,
+                'sessionCartId',
+                sessionCartId
+              );
+              console.log('res', res);
+              if (res?.[0].sessionCartId !== sessionCart.id) {
+              }
+              // // Delete current user cart
+              const resDel = await prisma.cart.deleteMany({
+                where: {
+                  AND: [
+                    { userId: user.id },
+                    { NOT: { sessionCartId: sessionCartId } },
+                  ],
+                },
+              });
+              console.log('delete resDel', resDel);
 
               // Assign new cart
               await prisma.cart.update({
@@ -117,13 +127,17 @@ export const config = {
             }
           }
         }
-      }
+        //if user has no name then use the Email
+        if (user.name === 'NO_NAME') {
+          token.name = user.email.split('@')[0];
 
-      // Handle session updates
-      if (session?.user.name && trigger === 'update') {
-        token.name = session.user.name;
+          // Update database to reflect the user name
+          await prisma.user.update({
+            where: { id: user.id },
+            data: { name: token.name },
+          });
+        }
       }
-
       return token;
     },
     authorized({ request, auth }: any) {
