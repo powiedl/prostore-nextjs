@@ -1,4 +1,5 @@
-import { compareSync } from 'bcrypt-ts-edge';
+//import { compareSync } from 'bcrypt-ts-edge';
+import { compare } from '@/lib/encrypt';
 import type { NextAuthConfig } from 'next-auth';
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
@@ -34,7 +35,8 @@ export const config = {
           },
         });
         if (user && user.password) {
-          const isMatch = compareSync(
+          //const isMatch = compareSync(
+          const isMatch = await compare(
             credentials.password as string,
             user.password
           );

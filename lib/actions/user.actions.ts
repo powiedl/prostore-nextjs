@@ -3,7 +3,9 @@
 import { signInFormSchema, signUpFormSchema } from '../validators';
 import { signIn, signOut } from '@/auth';
 import { isRedirectError } from 'next/dist/client/components/redirect-error';
-import { hashSync } from 'bcrypt-ts-edge';
+//import { hashSync } from 'bcrypt-ts-edge';
+import { hash } from '@/lib/encrypt';
+
 import { prisma } from '@/db/prisma';
 import { formatError } from '@/lib/utils';
 
@@ -42,7 +44,8 @@ export async function signUpUser(prevState: unknown, formData: FormData) {
       confirmPassword: formData.get('confirmPassword'),
     });
     const plainPassword = user.password;
-    user.password = hashSync(user.password, 10);
+    //user.password = hashSync(user.password, 10);
+    user.password = await hash(user.password);
 
     await prisma.user.create({
       data: {
