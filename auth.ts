@@ -110,7 +110,7 @@ export const config = {
                   ],
                 },
               });
-              console.log(res);
+              //              console.log(res);
 
               // Assign new cart
               await prismaCart.update({
