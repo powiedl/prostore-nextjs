@@ -6,7 +6,6 @@ import { redirect } from 'next/navigation';
 import { ShippingAddress } from '@/types';
 import ShippingAddressForm from './shipping-address-form';
 import CheckOutSteps from '@/components/shared/checkout-steps';
-import { Check } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Shipping Address',
