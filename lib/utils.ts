@@ -41,3 +41,14 @@ export function formatError(error: any) {
       : JSON.stringify(error.message);
   }
 }
+
+// Round number to 2 decimal places
+export function round(value: number | string, digits = 2) {
+  if (typeof value === 'number') {
+    return Math.round((value + Number.EPSILON) * 10 ** digits) / 10 ** digits;
+  } else if (typeof value === 'string') {
+    return (
+      Math.round((Number(value) + Number.EPSILON) * 10 ** digits) / 10 ** digits
+    );
+  } else throw new Error('Value is not a number or string');
+}
