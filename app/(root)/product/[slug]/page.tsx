@@ -80,7 +80,6 @@ const ProductPage = async ({
                         qty: 1,
                         image: product.images![0],
                       }}
-                      options={{ toast: { success: true, failure: true } }}
                     />
                   </div>
                 )}

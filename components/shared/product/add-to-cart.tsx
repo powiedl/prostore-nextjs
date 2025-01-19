@@ -18,7 +18,11 @@ type AddToCartProps = {
     };
   };
 };
-const AddToCart = ({ cart, item, options }: AddToCartProps) => {
+const AddToCart = ({
+  cart,
+  item,
+  options = { toast: { success: true, failure: true } },
+}: AddToCartProps) => {
   const router = useRouter();
   const { toast } = useToast();
 
@@ -29,13 +33,13 @@ const AddToCart = ({ cart, item, options }: AddToCartProps) => {
       const res = await addItemToCart(item);
       if (!res.success) {
         //console.log('something went wrong');
-        options?.toast?.failure &&
+        if (options?.toast?.failure)
           toast({ variant: 'destructive', description: res.message });
         return;
       }
       // handle success add to cart
       //console.log('nothing went wrong');
-      options?.toast?.success &&
+      if (options?.toast?.success)
         toast({
           description: res.message,
           action: (
