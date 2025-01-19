@@ -4,7 +4,7 @@ import { ShippingAddress } from '@/types';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import { shippingAddressSchema } from '@/lib/validators';
-import { date, z } from 'zod';
+import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { shippingAddressDefaultValues } from '@/lib/constants';
 import { ControllerRenderProps, useForm, SubmitHandler } from 'react-hook-form';
