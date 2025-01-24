@@ -66,3 +66,48 @@ export function formatCurrency(amount: number | string | null) {
     return CURRENCY_FORMATTER.format(Number(amount));
   return 'NaN';
 }
+
+// Shorten UUID
+export function formatId(id: string) {
+  return `..${id.substring(id.length - 6)}`;
+}
+
+// Format date and times
+export const formatDateTime = (dateString: Date) => {
+  const dateTimeOptions: Intl.DateTimeFormatOptions = {
+    month: 'short',
+    year: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: false,
+  };
+  const dateOptions: Intl.DateTimeFormatOptions = {
+    weekday: 'short',
+    month: 'short',
+    year: 'numeric',
+    day: 'numeric',
+  };
+  const timeOptions: Intl.DateTimeFormatOptions = {
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: false,
+  };
+  const formattedDateTime: string = new Date(dateString).toLocaleString(
+    'de-AT',
+    dateTimeOptions
+  );
+  const formattedDate: string = new Date(dateString).toLocaleString(
+    'de-AT',
+    dateOptions
+  );
+  const formattedTime: string = new Date(dateString).toLocaleString(
+    'de-AT',
+    timeOptions
+  );
+  return {
+    dateTime: formattedDateTime,
+    dateOnly: formattedDate,
+    timeOnly: formattedTime,
+  };
+};
