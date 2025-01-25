@@ -128,7 +128,6 @@ export const createPayPalOrder = async (orderId: string) => {
           },
         },
       });
-      console.log('createPayPalOrder, data', payPalOrder.id);
       return {
         success: true,
         message: 'Item order created successfully',

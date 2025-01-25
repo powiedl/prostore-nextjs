@@ -71,16 +71,11 @@ const OrderDetailsTable = ({
         description: res.message,
       });
     }
-    console.log('handleCreatePayPalOrder, res.data', res.data);
-    setPayPalCreateData(res.data);
+    setPayPalCreateData({ orderID: res.data });
     return res.data;
   };
   const handleApprovePayPalOrder = async (data: { orderID: string }) => {
-    //    const handleApprovePayPalOrder = async () => {
-    //    if (payPalCreateData && payPalCreateData?.orderID && typeof payPalCreateData.orderID ==='string') {
-    console.log('handleApprovePayPalOrder,data', data);
     const res = await approvePayPalOrder(order.id, data);
-    console.log('handleApprovePayPalOrder,res', res);
 
     toast({
       variant: res.success ? 'default' : 'destructive',
