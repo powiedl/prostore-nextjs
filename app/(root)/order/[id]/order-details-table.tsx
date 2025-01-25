@@ -23,7 +23,6 @@ import {
   createPayPalOrder,
   approvePayPalOrder,
 } from '@/lib/actions/order.actions';
-import { PrismaClientValidationError } from '@prisma/client/runtime/library';
 import { useToast } from '@/hooks/use-toast';
 import { useState } from 'react';
 
