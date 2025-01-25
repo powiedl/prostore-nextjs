@@ -193,8 +193,9 @@ const OrderDetailsTable = ({
                       }
                     />
                   </PayPalScriptProvider>
-                  <Card className='mt-8'>
-                    <CardContent className='flex flex-col gap-y-4'>
+                  <hr className='mt-6' />
+                  <div>
+                    <div className='flex flex-col gap-y-4'>
                       <h2 className='text-lg font-semibold mt-3'>
                         PayPal Sandbox User
                       </h2>
@@ -206,8 +207,8 @@ const OrderDetailsTable = ({
                         <span>Password</span>
                         <span>{'8"B$uU/.'}</span>
                       </div>
-                    </CardContent>
-                  </Card>
+                    </div>
+                  </div>
                 </div>
               )}
             </CardContent>
