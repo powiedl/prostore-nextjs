@@ -17,6 +17,7 @@ const OrderPage = async ({ params }: { params: Promise<{ id: string }> }) => {
         ...order,
         shippingAddress: order.shippingAddress as ShippingAddress, // notwendig, weil shippingAddress ein JSONType von Prisma ist - und der nicht ohne weiteres einem ShippingAddress Attribut genügt
       }}
+      paypalClientId={process.env.PAYPAL_CLIENT_ID || 'sb'}
     />
   );
 };

@@ -14,8 +14,36 @@ import { formatCurrency, formatDateTime, formatId } from '@/lib/utils';
 import { Order } from '@/types';
 import Image from 'next/image';
 import Link from 'next/link';
+import {
+  PayPalButtons,
+  PayPalScriptProvider,
+  usePayPalScriptReducer,
+} from '@paypal/react-paypal-js';
+import {
+  createPayPalOrder,
+  approvePayPalOrder,
+} from '@/lib/actions/order.actions';
+import { PrismaClientValidationError } from '@prisma/client/runtime/library';
+import { useToast } from '@/hooks/use-toast';
+import { useState } from 'react';
 
-const OrderDetailsTable = ({ order }: { order: Order }) => {
+const PrintLoadingState = () => {
+  const [{ isPending, isRejected }] = usePayPalScriptReducer();
+  let status = '';
+  if (isPending) {
+    status = 'Loading PayPal...';
+  } else if (isRejected) {
+    status = 'Error Loading PayPal';
+  }
+  return status;
+};
+const OrderDetailsTable = ({
+  order,
+  paypalClientId,
+}: {
+  order: Order;
+  paypalClientId: string;
+}) => {
   const {
     id,
     shippingAddress,
@@ -30,6 +58,35 @@ const OrderDetailsTable = ({ order }: { order: Order }) => {
     paidAt,
     deliveredAt,
   } = order;
+  const { toast } = useToast();
+  const [payPalCreateData, setPayPalCreateData] = useState<{
+    orderID?: string;
+  }>({});
+
+  const handleCreatePayPalOrder = async () => {
+    const res = await createPayPalOrder(order.id);
+    if (!res.success) {
+      toast({
+        variant: 'destructive',
+        description: res.message,
+      });
+    }
+    console.log('handleCreatePayPalOrder, res.data', res.data);
+    setPayPalCreateData(res.data);
+    return res.data;
+  };
+  const handleApprovePayPalOrder = async (data: { orderID: string }) => {
+    //    const handleApprovePayPalOrder = async () => {
+    //    if (payPalCreateData && payPalCreateData?.orderID && typeof payPalCreateData.orderID ==='string') {
+    console.log('handleApprovePayPalOrder,data', data);
+    const res = await approvePayPalOrder(order.id, data);
+    console.log('handleApprovePayPalOrder,res', res);
+
+    toast({
+      variant: res.success ? 'default' : 'destructive',
+      description: res.message,
+    });
+  };
   return (
     <>
       <h1 className='py-4 text-2xl'>Order {formatId(id)}</h1>
@@ -128,6 +185,22 @@ const OrderDetailsTable = ({ order }: { order: Order }) => {
                 <div>Total</div>
                 <div>{formatCurrency(totalPrice)}</div>
               </div>
+              {/* PayPal Payment */}
+              {!isPaid && paymentMethod === 'PayPal' && (
+                <div>
+                  <PayPalScriptProvider options={{ clientId: paypalClientId }}>
+                    <PrintLoadingState />
+                    <PayPalButtons
+                      createOrder={handleCreatePayPalOrder}
+                      onApprove={() =>
+                        handleApprovePayPalOrder(
+                          payPalCreateData as { orderID: string }
+                        )
+                      }
+                    />
+                  </PayPalScriptProvider>
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>
