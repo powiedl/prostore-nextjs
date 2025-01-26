@@ -10,6 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { Button } from '@/components/ui/button';
 import { formatCurrency, formatDateTime, formatId } from '@/lib/utils';
 import { Order } from '@/types';
 import Image from 'next/image';
@@ -22,9 +23,56 @@ import {
 import {
   createPayPalOrder,
   approvePayPalOrder,
+  updateOrderToPaidCOD,
+  deliverOrder,
 } from '@/lib/actions/order.actions';
 import { useToast } from '@/hooks/use-toast';
 import ProductPrice from '@/components/shared/product/product-price';
+import { useTransition } from 'react';
+
+const MarkAsPaidButton = ({ orderId }: { orderId: string }) => {
+  const [isPending, startTransition] = useTransition();
+  const { toast } = useToast();
+  return (
+    <Button
+      type='button'
+      disabled={isPending}
+      onClick={() =>
+        startTransition(async () => {
+          const res = await updateOrderToPaidCOD(orderId);
+          toast({
+            variant: res.success ? 'default' : 'destructive',
+            description: res.message,
+          });
+        })
+      }
+    >
+      {isPending ? 'processing ...' : 'Mark As Paid'}
+    </Button>
+  );
+};
+
+const MarkAsDeliveredButton = ({ orderId }: { orderId: string }) => {
+  const [isPending, startTransition] = useTransition();
+  const { toast } = useToast();
+  return (
+    <Button
+      type='button'
+      disabled={isPending}
+      onClick={() =>
+        startTransition(async () => {
+          const res = await deliverOrder(orderId);
+          toast({
+            variant: res.success ? 'default' : 'destructive',
+            description: res.message,
+          });
+        })
+      }
+    >
+      {isPending ? 'processing ...' : 'Mark As Delivered'}
+    </Button>
+  );
+};
 
 const PrintLoadingState = () => {
   const [{ isPending, isRejected }] = usePayPalScriptReducer();
@@ -36,12 +84,15 @@ const PrintLoadingState = () => {
   }
   return status;
 };
+
 const OrderDetailsTable = ({
   order,
   paypalClientId,
+  isAdmin,
 }: {
   order: Order;
   paypalClientId: string;
+  isAdmin: boolean;
 }) => {
   const {
     id,
@@ -83,36 +134,46 @@ const OrderDetailsTable = ({
       <div className='grid md:grid-cols-3 md:gap-5'>
         <div className='col-span-2 space-y-4 overflow-x-auto'>
           <Card>
-            <CardContent className='p-4 gap-4'>
-              <h2 className='text-xl pb-4'>Payment Method</h2>
-              <p className='mb-2'>{paymentMethod}</p>
-              {isPaid ? (
-                <Badge variant='secondary'>
-                  {' '}
-                  Paid at {formatDateTime(paidAt!).dateTime}
-                </Badge>
-              ) : (
-                <Badge variant='destructive'>Not paid</Badge>
+            <CardContent className='p-4 gap-4 flex flex-row justify-between'>
+              <div>
+                <h2 className='text-xl pb-4'>Payment Method</h2>
+                <p className='mb-2'>{paymentMethod}</p>
+                {isPaid ? (
+                  <Badge variant='secondary'>
+                    {' '}
+                    Paid at {formatDateTime(paidAt!).dateTime}
+                  </Badge>
+                ) : (
+                  <Badge variant='destructive'>Not paid</Badge>
+                )}
+              </div>
+              {isAdmin && !isPaid && paymentMethod === 'CashOnDelivery' && (
+                <MarkAsPaidButton orderId={order.id} />
               )}
             </CardContent>
           </Card>
           <Card>
-            <CardContent className='p-4 gap-4'>
-              <h2 className='text-xl pb-4'>Shipping Address</h2>
-              <p>{shippingAddress.fullName}</p>
-              <p>
-                {shippingAddress.streetAddress}, {shippingAddress.city}
-              </p>
-              <p className='mb-2'>
-                {shippingAddress.postalCode}, {shippingAddress.country}
-              </p>
-              {isDelivered ? (
-                <Badge variant='secondary'>
-                  {' '}
-                  Delivered at {formatDateTime(deliveredAt!).dateTime}
-                </Badge>
-              ) : (
-                <Badge variant='destructive'>Not delivered</Badge>
+            <CardContent className='p-4 gap-4 flex flex-row justify-between'>
+              <div>
+                <h2 className='text-xl pb-4'>Shipping Address</h2>
+                <p>{shippingAddress.fullName}</p>
+                <p>
+                  {shippingAddress.streetAddress}, {shippingAddress.city}
+                </p>
+                <p className='mb-2'>
+                  {shippingAddress.postalCode}, {shippingAddress.country}
+                </p>
+                {isDelivered ? (
+                  <Badge variant='secondary'>
+                    {' '}
+                    Delivered at {formatDateTime(deliveredAt!).dateTime}
+                  </Badge>
+                ) : (
+                  <Badge variant='destructive'>Not delivered</Badge>
+                )}
+              </div>
+              {isAdmin && isPaid && !isDelivered && (
+                <MarkAsDeliveredButton orderId={order.id} />
               )}
             </CardContent>
           </Card>
