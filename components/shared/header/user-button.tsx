@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { auth } from '@/auth';
-import { signOutUser } from '@/lib/actions/user.actions';
+
+import { signOutUserAndRedirectHome } from '@/lib/actions/user.actions';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -10,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { UserIcon } from 'lucide-react';
+
 const UserButton = async () => {
   const session = await auth();
   if (!session) {
@@ -58,8 +60,15 @@ const UserButton = async () => {
               Order History
             </Link>
           </DropdownMenuItem>
+          {session?.user?.role === 'admin' && (
+            <DropdownMenuItem>
+              <Link href='/admin/overview' className='w-full'>
+                Admin
+              </Link>
+            </DropdownMenuItem>
+          )}
           <DropdownMenuItem className='p-0 mb-1'>
-            <form action={signOutUser} className='w-full'>
+            <form action={signOutUserAndRedirectHome} className='w-full'>
               <Button
                 className='w-full py-4 px-2 h-4 justify-start'
                 variant='ghost'

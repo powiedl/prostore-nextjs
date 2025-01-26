@@ -37,6 +37,14 @@ export async function signInWithCredentials(
 }
 
 // Sign out user
+export async function signOutUserAndRedirectHome() {
+  await signOut({ redirectTo: '/', redirect: true });
+}
+
+export async function signOutUserAndRedirect(url: string) {
+  await signOut({ redirectTo: url, redirect: true });
+}
+
 export async function signOutUser() {
   await signOut();
 }
@@ -123,5 +131,26 @@ export async function updateUserPaymentMethod(
     return { success: true, message: 'User updated successfully' };
   } catch (error) {
     return { success: false, message: formatError(error) };
+  }
+}
+
+// Update the users profile
+export async function updateProfile(user: { name: string; email: string }) {
+  try {
+    const session = await auth();
+
+    const currentUser = await prisma.user.findFirst({
+      where: { id: session?.user?.id },
+    });
+    if (!currentUser) throw new Error('User not found');
+
+    await prisma.user.update({
+      where: { id: currentUser.id },
+      data: { name: user.name },
+    });
+
+    return { success: true, message: 'User updated successfully' };
+  } catch (error) {
+    return { success: false, nessage: formatError(error) };
   }
 }

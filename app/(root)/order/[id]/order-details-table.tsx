@@ -24,7 +24,7 @@ import {
   approvePayPalOrder,
 } from '@/lib/actions/order.actions';
 import { useToast } from '@/hooks/use-toast';
-import { useState } from 'react';
+import ProductPrice from '@/components/shared/product/product-price';
 
 const PrintLoadingState = () => {
   const [{ isPending, isRejected }] = usePayPalScriptReducer();
@@ -58,9 +58,6 @@ const OrderDetailsTable = ({
     deliveredAt,
   } = order;
   const { toast } = useToast();
-  const [payPalCreateData, setPayPalCreateData] = useState<{
-    orderID?: string;
-  }>({});
 
   const handleCreatePayPalOrder = async () => {
     const res = await createPayPalOrder(order.id);
@@ -70,7 +67,6 @@ const OrderDetailsTable = ({
         description: res.message,
       });
     }
-    setPayPalCreateData({ orderID: res.data });
     return res.data;
   };
   const handleApprovePayPalOrder = async (data: { orderID: string }) => {
@@ -128,12 +124,12 @@ const OrderDetailsTable = ({
                   <TableRow>
                     <TableHead>Item </TableHead>
                     <TableHead>Quantity </TableHead>
-                    <TableHead>Price </TableHead>
+                    <TableHead className='text-right'>Price </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {orderitems.map((item) => (
-                    <TableRow key={item.slug}>
+                    <TableRow key={item.slug} className='text-base'>
                       <TableCell>
                         <Link href={`/product/{item.slug}`}>
                           <Image
@@ -149,9 +145,13 @@ const OrderDetailsTable = ({
                         <span className='px-2'>{item.qty}</span>
                       </TableCell>
                       <TableCell>
-                        <span className='text-price'>
+                        <ProductPrice
+                          value={Number(item.price)}
+                          className='text-right text-base'
+                        />
+                        {/* <span className='text-right'>
                           {formatCurrency(item.price)}
-                        </span>
+                        </span> */}
                       </TableCell>
                     </TableRow>
                   ))}
@@ -186,9 +186,10 @@ const OrderDetailsTable = ({
                     <PrintLoadingState />
                     <PayPalButtons
                       createOrder={handleCreatePayPalOrder}
-                      onApprove={() =>
+                      // onApprove={handleApprovePayPalOrder}
+                      onApprove={(p) =>
                         handleApprovePayPalOrder(
-                          payPalCreateData as { orderID: string }
+                          p // as { orderID: string }
                         )
                       }
                     />

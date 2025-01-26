@@ -122,6 +122,7 @@ export const config = {
 
       // Handle session updates
       if (session?.user.name && trigger === 'update') {
+        console.log(`auth.ts,jwt callback,new name:'${session.user.name}'`);
         token.name = session.user.name;
       }
 

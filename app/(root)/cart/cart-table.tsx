@@ -20,6 +20,7 @@ import {
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import AddToCart from '@/components/shared/product/add-to-cart';
+import ProductPrice from '@/components/shared/product/product-price';
 
 const CartTable = ({ cart }: { cart?: Cart }) => {
   const router = useRouter();
@@ -125,7 +126,11 @@ const CartTable = ({ cart }: { cart?: Cart }) => {
                       */}
                     </TableCell>
                     <TableCell className='text-right'>
-                      ${formatCurrency(item.price)}
+                      {/* ${formatCurrency(item.price)} */}
+                      <ProductPrice
+                        value={Number(item.price)}
+                        className='text-lg'
+                      />
                     </TableCell>
                   </TableRow>
                 ))}

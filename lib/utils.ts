@@ -54,7 +54,7 @@ export function round(value: number | string, digits = 2) {
   } else throw new Error('Value is not a number or string');
 }
 
-const CURRENCY_FORMATTER = new Intl.NumberFormat('en-US', {
+const CURRENCY_FORMATTER = new Intl.NumberFormat('de-AT', {
   currency: 'USD',
   style: 'currency',
   minimumFractionDigits: 2,
@@ -68,6 +68,11 @@ export function formatCurrency(amount: number | string | null) {
   return 'NaN';
 }
 
+// Format Number
+const NUMBER_FORMATTER = new Intl.NumberFormat('de-AT');
+export function formatNumber(number: number) {
+  return NUMBER_FORMATTER.format(number);
+}
 // Shorten UUID
 export function formatId(id: string) {
   return `..${id.substring(id.length - 6)}`;
