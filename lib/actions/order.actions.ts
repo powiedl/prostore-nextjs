@@ -7,7 +7,12 @@ import { getMyCart } from './cart.actions';
 import { getUserById } from './user.actions';
 import { insertOrderSchema } from '../validators';
 import { prisma } from '@/db/prisma';
-import { CartItem, PaymentResult } from '@/types';
+import {
+  OrdersTableDataType,
+  CartItem,
+  PaymentResult,
+  ShippingAddress,
+} from '@/types';
 import { paypal } from '../paypal';
 import { revalidatePath } from 'next/cache';
 import { PAGE_SIZE } from '@/lib/constants';
@@ -250,11 +255,15 @@ export async function getMyOrders({
     take: limit,
     skip: (page - 1) * limit,
   });
+  const orderData: OrdersTableDataType[] = data.map((o) => ({
+    ...o,
+    shippingAddress: o.shippingAddress as ShippingAddress,
+  }));
   const dataCount = await prisma.order.count({
     where: { userId: session.user.id },
   });
   return {
-    data,
+    data: orderData,
     totalPages: Math.ceil(dataCount / limit),
   };
 }
@@ -305,4 +314,42 @@ export async function getOrderSummary() {
     latestSales,
     salesData,
   };
+}
+
+// Get all orders
+export async function getAllOrders({
+  limit = PAGE_SIZE,
+  page,
+}: {
+  limit?: number;
+  page: number;
+}): Promise<{ data: OrdersTableDataType[]; totalPages: number }> {
+  const data = await prisma.order.findMany({
+    orderBy: { createdAt: 'desc' },
+    take: limit,
+    skip: (page - 1) * limit,
+    include: {
+      user: {
+        select: { name: true },
+      },
+    },
+  });
+  const orderData: OrdersTableDataType[] = data.map((o) => ({
+    ...o,
+    shippingAddress: o.shippingAddress as ShippingAddress,
+  }));
+  const dataCount = await prisma.order.count();
+  return { data: orderData, totalPages: Math.ceil(dataCount / limit) };
+}
+
+// Delete an order
+export async function deleteOrder(id: string) {
+  try {
+    await prisma.order.delete({ where: { id } });
+
+    revalidatePath('/admin/orders');
+    return { success: true, message: 'Order deleted successfully' };
+  } catch (error) {
+    return { success: false, message: formatError(error) };
+  }
 }

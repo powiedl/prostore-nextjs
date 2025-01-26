@@ -30,4 +30,10 @@ export type Order = z.infer<typeof insertOrderSchema> & {
   user: { name: string; email: string };
 };
 
+// type used as return type for getAllOrders action
+export type OrdersTableDataType = Omit<Order, 'orderitems' | 'user'> & {
+  // remove orderitems and user attributes from Order
+  user?: { name: string }; // and add user: {name: string } to it
+};
+
 export type PaymentResult = z.infer<typeof paymentResultSchema>;
