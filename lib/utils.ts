@@ -2,6 +2,7 @@ import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import qs from 'query-string';
 
+const locale = process.env.DEFAULT_LOCALE || 'de-AT';
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -54,7 +55,7 @@ export function round(value: number | string, digits = 2) {
   } else throw new Error('Value is not a number or string');
 }
 
-const CURRENCY_FORMATTER = new Intl.NumberFormat('de-AT', {
+const CURRENCY_FORMATTER = new Intl.NumberFormat(locale, {
   currency: 'USD',
   style: 'currency',
   minimumFractionDigits: 2,
@@ -100,15 +101,15 @@ export const formatDateTime = (dateString: Date) => {
     hour12: false,
   };
   const formattedDateTime: string = new Date(dateString).toLocaleString(
-    'de-AT',
+    locale,
     dateTimeOptions
   );
   const formattedDate: string = new Date(dateString).toLocaleString(
-    'de-AT',
+    locale,
     dateOptions
   );
   const formattedTime: string = new Date(dateString).toLocaleString(
-    'de-AT',
+    locale,
     timeOptions
   );
   return {

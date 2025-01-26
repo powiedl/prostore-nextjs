@@ -1,5 +1,5 @@
 import { cn, formatNumberWithDecimal } from '@/lib/utils';
-
+import { format } from '@/lib/format';
 const ProductPrice = ({
   value,
   className,
@@ -15,7 +15,10 @@ const ProductPrice = ({
     <p className={cn('text-2xl', className)}>
       <span className='text-xs align-super'>$</span>
       {intValue}
-      <span className='text-xs align-super'>.{floatValue}</span>
+      <span className='text-xs align-super'>
+        {format.decimal}
+        {floatValue}
+      </span>
     </p>
   );
 };

@@ -1,13 +1,23 @@
 import { auth } from '@/auth';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 import { getOrderSummary } from '@/lib/actions/order.actions';
-import { formatCurrency, formatNumber } from '@/lib/utils';
-import { BadgeDollarSign, CreditCard } from 'lucide-react';
+import { formatCurrency, formatDateTime, formatNumber } from '@/lib/utils';
+import { BadgeDollarSign, Barcode, CreditCard, Users } from 'lucide-react';
 import { Metadata } from 'next';
+import Link from 'next/link';
 import { PropsWithChildren } from 'react';
 export const metadata: Metadata = {
   title: 'Admin Dashboard',
 };
+import Charts from './charts';
 
 const AdminOverviewPage = async () => {
   const session = await auth();
@@ -35,6 +45,61 @@ const AdminOverviewPage = async () => {
             {formatNumber(summary.ordersCount)}
           </div>
         </InfoCard>
+        <InfoCard title='Customers' icon={<Users />}>
+          <div className='text-2xl font-bold'>
+            {formatNumber(summary.usersCount)}
+          </div>
+        </InfoCard>
+        <InfoCard title='Products' icon={<Barcode />}>
+          <div className='text-2xl font-bold'>
+            {formatNumber(summary.productsCount)}
+          </div>
+        </InfoCard>
+      </div>
+      <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-7'>
+        <Card className='col-span-4'>
+          <CardHeader>
+            <CardTitle>Overview</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Charts data={{ salesData: summary.salesData }} />
+          </CardContent>
+        </Card>
+        <Card className='col-span-3'>
+          <CardHeader>
+            <CardTitle>Recent Sales</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>BUYER</TableHead>
+                  <TableHead>DATE</TableHead>
+                  <TableHead className='text-right'>TOTAL</TableHead>
+                  <TableHead>ACTIONS</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {summary.latestSales.map((order) => (
+                  <TableRow key={order.id}>
+                    <TableCell>
+                      {order?.user?.name ? order.user.name : 'Deleted User'}
+                    </TableCell>
+                    <TableCell>
+                      {formatDateTime(order.createdAt).dateOnly}
+                    </TableCell>
+                    <TableCell className='text-right'>
+                      {formatCurrency(order.totalPrice)}
+                    </TableCell>
+                    <TableCell>
+                      <Link href={`/order/${order.id}`}>Details</Link>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
