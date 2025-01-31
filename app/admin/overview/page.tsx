@@ -25,36 +25,51 @@ const AdminOverviewPage = async () => {
   if (session?.user?.role !== 'admin')
     throw new Error('User is not authorized');
   const summary = await getOrderSummary();
-  console.log(summary);
-  console.log(
-    summary?.totalSales?._sum?.totalPrice,
-    typeof summary?.totalSales?._sum?.totalPrice
-  );
 
   return (
     <div className='space-y-2'>
       <h1 className='h2-bold'>Dashboard</h1>
       <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-4'>
-        <InfoCard title='Total Revenue' icon={<BadgeDollarSign />}>
-          <div className='text-2xl font-bold'>
-            {formatCurrency(summary.totalSales._sum.totalPrice)}
-          </div>
-        </InfoCard>
-        <InfoCard title='Sales' icon={<CreditCard />}>
-          <div className='text-2xl font-bold'>
-            {formatNumber(summary.ordersCount)}
-          </div>
-        </InfoCard>
-        <InfoCard title='Customers' icon={<Users />}>
-          <div className='text-2xl font-bold'>
-            {formatNumber(summary.usersCount)}
-          </div>
-        </InfoCard>
-        <InfoCard title='Products' icon={<Barcode />}>
-          <div className='text-2xl font-bold'>
-            {formatNumber(summary.productsCount)}
-          </div>
-        </InfoCard>
+        <Link
+          href='/admin/orders'
+          className='text-sm font-medium transition-colors'
+        >
+          <InfoCard title='Total Revenue' icon={<BadgeDollarSign />}>
+            <div className='text-2xl font-bold'>
+              {formatCurrency(summary.totalSales._sum.totalPrice)}
+            </div>
+          </InfoCard>
+        </Link>
+        <Link
+          href='/admin/orders'
+          className='text-sm font-medium transition-colors'
+        >
+          <InfoCard title='Sales' icon={<CreditCard />}>
+            <div className='text-2xl font-bold'>
+              {formatNumber(summary.ordersCount)}
+            </div>
+          </InfoCard>
+        </Link>
+        <Link
+          href='/admin/users'
+          className='text-sm font-medium transition-colors'
+        >
+          <InfoCard title='Customers' icon={<Users />}>
+            <div className='text-2xl font-bold'>
+              {formatNumber(summary.usersCount)}
+            </div>
+          </InfoCard>
+        </Link>
+        <Link
+          href='/admin/products'
+          className='text-sm font-medium transition-colors'
+        >
+          <InfoCard title='Products' icon={<Barcode />}>
+            <div className='text-2xl font-bold'>
+              {formatNumber(summary.productsCount)}
+            </div>
+          </InfoCard>
+        </Link>
       </div>
       <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-7'>
         <Card className='col-span-4'>
@@ -109,9 +124,12 @@ const InfoCard = ({
   title,
   icon,
   children,
-}: PropsWithChildren<{ title: string; icon: React.ReactNode }>) => {
+}: PropsWithChildren<{
+  title: string;
+  icon: React.ReactNode;
+}>) => {
   return (
-    <Card>
+    <Card className='hover:cursor-pointer hover:scale-95 hover:bg-muted'>
       <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
         <CardTitle className='text-sm font-medium'>{title}</CardTitle>
         {icon}

@@ -10,6 +10,7 @@
   .flex-start {
     @apply flex justify-start items-center;
   }
+
   .flex-center {
     @apply flex justify-center items-center;
   }
@@ -59,6 +60,7 @@
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
   }
+
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
@@ -91,4 +93,13 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Upload button text override */
+html.dark .upload-field .text-white {
+  color: #fff !important;
+}
+
+.upload-field .text-white {
+  color: #000 !important;
 }
