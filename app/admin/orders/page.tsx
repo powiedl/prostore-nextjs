@@ -8,16 +8,24 @@ export const metadata: Metadata = {
 const AdminOrdersPage = async ({
   searchParams,
 }: {
-  searchParams: Promise<{ page: string }>;
+  searchParams: Promise<{ page: string; query: string }>;
 }) => {
-  const { page = '1' } = await searchParams;
+  const { page = '1', query } = await searchParams;
   const session = await auth();
   if (session?.user?.role !== 'admin')
     throw new Error('User is not authorized');
   const orders = await getAllOrders({
     page: Number(page),
+    query,
   });
   //console.log(orders);
-  return <OrderTable orders={orders} page={Number(page)} withDelete={true} />;
+  return (
+    <OrderTable
+      orders={orders}
+      page={Number(page)}
+      withDelete={true}
+      query={query}
+    />
+  );
 };
 export default AdminOrdersPage;

@@ -27,6 +27,12 @@ const infos: {
   },
   {
     modification:
+      'Use the same shared component OrderTable in user and admin context',
+    date: 'During the course',
+    status: 'DONE',
+  },
+  {
+    modification:
       'Categories should be &quot;fixed&quot; values from the database - and abiltity to modify the categories as an admin',
     status: 'TODO',
   },

@@ -1,3 +1,4 @@
+import { Metadata } from 'next';
 import Link from 'next/link';
 import { deleteProduct, getAllProducts } from '@/lib/actions/products.actions';
 import { formatCurrency, formatId } from '@/lib/utils';
@@ -13,6 +14,9 @@ import {
 import Pagination from '@/components/shared/pagination';
 import DeleteDialog from '@/components/shared/delete-dialog';
 
+export const metadata: Metadata = {
+  title: 'Admin Products',
+};
 const AdminProductsPage = async ({
   searchParams,
 }: {
@@ -23,6 +27,7 @@ const AdminProductsPage = async ({
   }>;
 }) => {
   const { page = '1', query = '', category = '' } = await searchParams;
+
   const products = await getAllProducts({
     query,
     page: Number(page),
@@ -31,7 +36,19 @@ const AdminProductsPage = async ({
   return (
     <div className='space-y-2'>
       <div className='flex-between'>
-        <h1 className='h2-bold'>Products</h1>
+        <div className='flex items-center gap-3'>
+          <h1 className='h2-bold'>Products</h1>
+          {query && (
+            <div>
+              Filtered by <i>&quot;{query}&quot;</i>{' '}
+              <Link href='/admin/products'>
+                <Button variant='outline' size='sm'>
+                  Remove Filter
+                </Button>
+              </Link>
+            </div>
+          )}
+        </div>
         <Button asChild variant='default'>
           <Link href='/admin/products/create'>Create Product</Link>
         </Button>

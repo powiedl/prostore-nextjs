@@ -124,3 +124,9 @@ export const updateProfileSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
   email: z.string().email().min(2, 'E-Mail must be at least 2 characters'),
 });
+
+// Schema for updateing users
+export const updateUserSchema = updateProfileSchema.extend({
+  id: z.string().min(1, 'id is required'),
+  role: z.string().min(1, 'role is required'),
+});

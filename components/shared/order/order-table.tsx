@@ -19,20 +19,35 @@ const OrderTable = ({
   orders,
   page,
   withDelete = false,
+  query,
 }: {
   orders: { data: OrdersTableDataType[]; totalPages: number };
   page?: number;
   withDelete?: boolean;
+  query?: string;
 }) => {
   return (
     <div className='space-y-2'>
-      <h2 className='h2-bold'>Orders</h2>
+      <div className='flex items-center gap-3'>
+        <h2 className='h2-bold'>Orders</h2>
+        {withDelete && query && (
+          <div>
+            Filtered by <i>&quot;{query}&quot;</i>{' '}
+            <Link href='/admin/orders'>
+              <Button variant='outline' size='sm'>
+                Remove Filter
+              </Button>
+            </Link>
+          </div>
+        )}
+      </div>
       <div className='overflow-x-auto'>
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead>ID</TableHead>
               <TableHead>DATE</TableHead>
+              {withDelete && <TableHead>BUYER</TableHead>}
               <TableHead>TOTAL</TableHead>
               <TableHead>PAID</TableHead>
               <TableHead>DELIVERED</TableHead>
@@ -46,6 +61,7 @@ const OrderTable = ({
                 <TableCell>
                   {formatDateTime(order.createdAt).dateTime}
                 </TableCell>
+                {withDelete && <TableCell>{order?.user?.name || ''}</TableCell>}
                 <TableCell>{formatCurrency(order.totalPrice)}</TableCell>
                 <TableCell>
                   {order.isPaid && order.paidAt
