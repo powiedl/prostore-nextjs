@@ -26,7 +26,6 @@ const AdminUserPage = async ({
   const { page = 1, query } = await searchParams;
 
   const users = await getAllUsers({ page: Number(page), query });
-  console.log(users);
   return (
     <div className='space-y-2'>
       <div className='flex-between'>

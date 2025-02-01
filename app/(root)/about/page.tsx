@@ -9,32 +9,55 @@ import {
 import { cn } from '@/lib/utils';
 
 const infos: {
-  modification: string;
+  modification: {
+    heading: string;
+    detail?: string;
+  };
   date?: string | Date;
-  status: 'TODO' | 'INPROGRESS' | 'DONE' | 'OBSOLETE';
+  status: 'TODO' | 'IN PROGRESS' | 'DONE' | 'OBSOLETE';
 }[] = [
   {
-    modification:
-      'Admin - Overview: The cards at the top are links to the coresponding details page',
-    date: 'During the course',
+    modification: {
+      heading: 'Admin - Overview',
+      detail: 'The cards at the top are links to the coresponding details page',
+    },
+    date: 'Jan 2025',
     status: 'DONE',
   },
   {
-    modification:
-      ' The pagination component also includes first and last page (not only prev and next)',
-    date: 'During the course',
+    modification: {
+      heading: 'pagination',
+      detail:
+        ' The pagination component also includes first and last page (not only prev and next)',
+    },
+    date: 'Jan 2025',
     status: 'DONE',
   },
   {
-    modification:
-      'Use the same shared component OrderTable in user and admin context',
-    date: 'During the course',
+    modification: {
+      heading: 'order table',
+      detail:
+        'Use the same shared component OrderTable in user and admin context',
+    },
+    date: 'Jan 2025',
     status: 'DONE',
   },
   {
-    modification:
-      'Categories should be &quot;fixed&quot; values from the database - and abiltity to modify the categories as an admin',
+    modification: {
+      heading: 'categories',
+      detail:
+        'Categories should be "fixed" values from the database - and abiltity to modify the categories as an admin',
+    },
     status: 'TODO',
+  },
+  {
+    modification: {
+      heading: 'product search sidebar',
+      detail:
+        'The different filters should be collapseable (and if one is collapsed, the current value should be beside the heading)',
+    },
+    status: 'DONE',
+    date: 'Feb 2025',
   },
 ];
 
@@ -53,17 +76,24 @@ const AboutPage = () => {
         <TableBody>
           {infos.map((i) => (
             <TableRow
-              key={i.modification}
+              key={i.modification.heading + i.modification.detail}
               className={cn(
                 'rounded-lg border-spacing-y-2 border-spacing-x-0',
                 i.status === 'DONE'
                   ? 'bg-green-200 hover:bg-green-300'
                   : i.status === 'OBSOLETE'
-                  ? 'bg-red-200 hover:bg-red-300'
+                  ? 'bg-gray-200 hover:bg-gray-300'
+                  : i.status === 'IN PROGRESS'
+                  ? 'bg-yellow-200 hover:bg-yellow-300'
                   : ''
               )}
             >
-              <TableCell>{i.modification}</TableCell>
+              <TableCell>
+                <span className='font-semibold mr-2 capitalize'>
+                  {i.modification.heading}
+                </span>
+                {i.modification?.detail}
+              </TableCell>
               <TableCell>{i.date?.toString()}</TableCell>
               <TableCell className='text-center'>{i.status}</TableCell>
             </TableRow>
