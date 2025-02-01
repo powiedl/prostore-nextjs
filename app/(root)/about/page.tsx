@@ -21,7 +21,7 @@ const infos: {
       heading: 'Admin - Overview',
       detail: 'The cards at the top are links to the coresponding details page',
     },
-    date: 'Jan 2025',
+    date: '01/2025',
     status: 'DONE',
   },
   {
@@ -30,7 +30,7 @@ const infos: {
       detail:
         ' The pagination component also includes first and last page (not only prev and next)',
     },
-    date: 'Jan 2025',
+    date: '01/2025',
     status: 'DONE',
   },
   {
@@ -39,7 +39,7 @@ const infos: {
       detail:
         'Use the same shared component OrderTable in user and admin context',
     },
-    date: 'Jan 2025',
+    date: '01/2025',
     status: 'DONE',
   },
   {
@@ -57,7 +57,16 @@ const infos: {
         'The different filters should be collapseable (and if one is collapsed, the current value should be beside the heading)',
     },
     status: 'DONE',
-    date: 'Feb 2025',
+    date: '02/2025',
+  },
+  {
+    modification: {
+      heading: 'product search pagination',
+      detail:
+        'Added pagination to the search page (was a little tricky, because if you sharpen the filter there might not be enough products for the current page',
+    },
+    status: 'DONE',
+    date: '02/2025',
   },
 ];
 
