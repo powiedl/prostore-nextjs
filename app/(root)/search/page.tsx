@@ -7,6 +7,8 @@ import {
 import { Product } from '@/types';
 import Link from 'next/link';
 import FilterBlock from '@/components/filter-block';
+import Pagination from '@/components/shared/pagination';
+import { redirect } from 'next/navigation';
 
 const prices = [
   { label: '$1 to $50', value: '1-50' },
@@ -112,8 +114,13 @@ const SearchPage = async ({
     sort,
     page: Number(page),
   });
+  if (products.filteredPages < Number(page) && products.filteredCount > 0) {
+    redirect(
+      getFilterUrl({ c: category, s: sort, p: price, r: rating, pg: '1' })
+    );
+  }
   const categories = await getAllCategories();
-
+  const filteredPages = products.filteredPages;
   return (
     <div className='grid md:grid-cols-5 md:gap-5'>
       <div className='filter-links'>
@@ -235,6 +242,9 @@ const SearchPage = async ({
             <ProductCard key={p.id} product={p} />
           ))}
         </div>
+        {filteredPages > 1 && (
+          <Pagination page={page} totalPages={filteredPages} />
+        )}
       </div>
     </div>
   );
