@@ -5,6 +5,8 @@ import {
 } from '@/lib/actions/products.actions';
 import ProductCarousel from '@/components/shared/product/product-carousel';
 import ViewAllProductsButton from '@/components/view-all-products-button';
+import IconBoxes from '@/components/icon-boxes';
+import DealCountdown from '@/components/deal-countdown';
 
 //const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 const Homepage = async () => {
@@ -18,6 +20,8 @@ const Homepage = async () => {
       )}
       <ProductList data={latestProducts} title='Newest Arrivals' />
       <ViewAllProductsButton />
+      <DealCountdown />
+      <IconBoxes />
     </>
   );
 };
