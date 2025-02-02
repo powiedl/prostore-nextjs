@@ -29,6 +29,7 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import ProductPrice from '@/components/shared/product/product-price';
 import { useTransition } from 'react';
+import StripePayment from './stripe-payment';
 
 const MarkAsPaidButton = ({ orderId }: { orderId: string }) => {
   const [isPending, startTransition] = useTransition();
@@ -89,10 +90,12 @@ const OrderDetailsTable = ({
   order,
   paypalClientId,
   isAdmin,
+  stripeClientSecret,
 }: {
   order: Order;
   paypalClientId: string;
   isAdmin: boolean;
+  stripeClientSecret: string | null;
 }) => {
   const {
     id,
@@ -272,6 +275,15 @@ const OrderDetailsTable = ({
                     </div>
                   </div>
                 </div>
+              )}
+              {/* Stripe Payment */}
+              {!isPaid && paymentMethod === 'Stripe' && stripeClientSecret && (
+                <StripePayment
+                  priceInCents={Number(order.totalPrice) * 100}
+                  orderId={order.id}
+                  clientSecret={stripeClientSecret}
+                  userEmail={order?.user?.email || ''}
+                />
               )}
             </CardContent>
           </Card>

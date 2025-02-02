@@ -74,7 +74,7 @@ const AboutPage = () => {
   return (
     <div>
       <h2 className='font-semibold text-2xl'>My additions / modifications</h2>
-      <Table className='about-table border-separate'>
+      <Table className='about-table border-separate border-spacing-y-3'>
         <TableHeader>
           <TableRow>
             <TableHead>MODIFICATION</TableHead>
@@ -87,7 +87,7 @@ const AboutPage = () => {
             <TableRow
               key={i.modification.heading + i.modification.detail}
               className={cn(
-                'rounded-lg border-spacing-y-2 border-spacing-x-0',
+                'rounded-lg',
                 i.status === 'DONE'
                   ? 'bg-green-200 hover:bg-green-300'
                   : i.status === 'OBSOLETE'
@@ -97,14 +97,16 @@ const AboutPage = () => {
                   : ''
               )}
             >
-              <TableCell>
+              <TableCell className='rounded-l-lg'>
                 <span className='font-semibold mr-2 capitalize'>
                   {i.modification.heading}
                 </span>
                 {i.modification?.detail}
               </TableCell>
               <TableCell>{i.date?.toString()}</TableCell>
-              <TableCell className='text-center'>{i.status}</TableCell>
+              <TableCell className='text-center rounded-r-lg'>
+                {i.status}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
