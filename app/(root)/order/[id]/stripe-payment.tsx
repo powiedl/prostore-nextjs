@@ -1,4 +1,4 @@
-import { loadStripe, type StripeError } from '@stripe/stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 import {
   Elements,
   LinkAuthenticationElement,
@@ -87,7 +87,7 @@ const StripePayment = ({
   userEmail: string;
 }) => {
   const { theme, systemTheme } = useTheme();
-  const [stripePromise, setStripePromise] = useState(() =>
+  const [stripePromise /*, setStripePromise*/] = useState(() =>
     loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string)
   );
 
