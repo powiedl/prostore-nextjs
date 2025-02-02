@@ -68,6 +68,15 @@ const infos: {
     status: 'DONE',
     date: '02/2025',
   },
+  {
+    modification: {
+      heading: 'stripe payment - on localhost',
+      detail:
+        'Possibility to mark order as paid (from within the "Thanks for your purchase" site)',
+    },
+    status: 'DONE',
+    date: '02/2025',
+  },
 ];
 
 const AboutPage = () => {
