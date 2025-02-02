@@ -73,7 +73,10 @@ const infos: {
 const AboutPage = () => {
   return (
     <div>
-      <h2 className='font-semibold text-2xl'>My additions / modifications</h2>
+      <h2 className='font-semibold text-2xl'>
+        My additions / modifications (@
+        {process.env.NEXT_PUBLIC_APP_VERSION || 'latest'} )
+      </h2>
       <Table className='about-table border-separate border-spacing-y-3'>
         <TableHeader>
           <TableRow>
