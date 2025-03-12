@@ -14,10 +14,13 @@ import { updateProfile } from '@/lib/actions/user.actions';
 import { updateProfileSchema } from '@/lib/validators';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 const ProfileForm = () => {
   const { data: session, update } = useSession();
+  //  const pathname = usePathname();
+  const router = useRouter();
   const form = useForm<z.infer<typeof updateProfileSchema>>({
     resolver: zodResolver(updateProfileSchema),
     defaultValues: {
@@ -29,6 +32,8 @@ const ProfileForm = () => {
   const onSubmit = async (values: z.infer<typeof updateProfileSchema>) => {
     const res = await updateProfile(values);
     if (!res.success) {
+      //router.push(pathname);
+      // @refresh reset
       return toast({ variant: 'destructive', description: res.message });
     }
 
@@ -37,6 +42,9 @@ const ProfileForm = () => {
       user: { ...session?.user, name: values.name },
     };
     await update(newSession);
+    router.refresh();
+    //router.push('/user/profile');
+    //window.location.reload();
 
     toast({ description: 'User updated successfully' });
   };

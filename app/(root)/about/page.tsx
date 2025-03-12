@@ -84,7 +84,7 @@ const AboutPage = () => {
     <div>
       <h2 className='font-semibold text-2xl'>
         My additions / modifications (@
-        {process.env.NEXT_PUBLIC_APP_VERSION || 'latest'} )
+        {process.env.NEXT_PUBLIC_APP_VERSION || 'latest'})
       </h2>
       <Table className='about-table border-separate border-spacing-y-3'>
         <TableHeader>
@@ -103,10 +103,10 @@ const AboutPage = () => {
                 i.status === 'DONE'
                   ? 'bg-green-200 hover:bg-green-300'
                   : i.status === 'OBSOLETE'
-                  ? 'bg-gray-200 hover:bg-gray-300'
-                  : i.status === 'IN PROGRESS'
-                  ? 'bg-yellow-200 hover:bg-yellow-300'
-                  : ''
+                    ? 'bg-gray-200 hover:bg-gray-300'
+                    : i.status === 'IN PROGRESS'
+                      ? 'bg-yellow-200 hover:bg-yellow-300'
+                      : ''
               )}
             >
               <TableCell className='rounded-l-lg'>
