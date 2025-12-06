@@ -1,7 +1,10 @@
 import Link from 'next/link';
 import { auth } from '@/auth';
 
-import { signOutUserAndRedirectHome } from '@/lib/actions/user.actions';
+import {
+  signOutUserAndRedirectHome,
+  signOutUserAndRedirect,
+} from '@/lib/actions/user.actions';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -73,6 +76,7 @@ const UserButton = async () => {
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem className='p-0 mb-1'>
+            {/* <form action={() => signOutUserAndRedirect('/')} className='w-full'> */}
             <form action={signOutUserAndRedirectHome} className='w-full'>
               <Button
                 className='w-full py-4 px-2 h-4 justify-start'

@@ -42,6 +42,7 @@ export async function signInWithCredentials(
 
 // Sign out user
 export async function signOutUserAndRedirectHome() {
+  //'use server';
   await signOut({ redirectTo: '/', redirect: true });
 }
 
