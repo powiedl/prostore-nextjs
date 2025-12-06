@@ -3,7 +3,7 @@ import { auth } from '@/auth';
 
 import {
   signOutUserAndRedirectHome,
-  signOutUserAndRedirect,
+  //  signOutUserAndRedirect,
 } from '@/lib/actions/user.actions';
 import { Button } from '@/components/ui/button';
 import {
